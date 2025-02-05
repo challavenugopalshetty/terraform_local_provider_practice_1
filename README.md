@@ -22,9 +22,9 @@ Always its good to learn a tool by doing smaller projects.
 
 ## Key components:
 
-- Providers
-    Providers in terraform are kind of pulgins that interact with the different cloud providers and they act like a bridge between terraform configurations and infrastructure resources.
-    Declaring a provider 
+- **Providers**  
+    Providers in terraform are kind of pulgins that interact with the different cloud providers and they act like a bridge between terraform configurations and infrastructure resources.  
+    Declaring a provider: 
     ```
     terraform {
         required_providers {
