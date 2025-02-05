@@ -22,14 +22,31 @@ Always its good to learn a tool by doing smaller projects.
 
 ## Key components:
 
-Providers
-Resources
-Modules
-Variables
-State
-Plan
-Apply
-Provisioners
+- Providers
+    Providers in terraform are kind of pulgins that interact with the different cloud providers and they act like a bridge between terraform configurations and infrastructure resources.
+    Declaring a provider 
+    ```
+    terraform {
+        required_providers {
+            local = {
+                source = "hashicorp/local"
+                version = "2.5.2"
+            }
+        }
+    }
+
+    provider "local" {
+        # add the configurations for local provider
+    }
+    ```
+    here firstly the terraform block downloads the mentioned required provider here it is local provider from the terraform registery and provider block tell which all providers we are going to be used in this configuration. The best practice is to keep the providers in seperate file called **providers.tf**
+- Resources
+- Modules
+- Variables
+- State
+- Plan
+- Apply
+- Provisioners
 
 ## Core workflow of Terraform:
 
@@ -39,12 +56,14 @@ Provisioners
 ## Maintaining folder structure based on best practices:
 
 This is the basic file structure I followed for this simple project. A more detailed folder structure can be implemented when working with different environments (such as dev, stage, and prod) or when maintaining a remote state.
+```
 .
 ├── main.tf
 ├── providers.tf
 ├── terraform.tfstate
 ├── terraform.tfvars
 └── variables.tf
+```
 
 
 

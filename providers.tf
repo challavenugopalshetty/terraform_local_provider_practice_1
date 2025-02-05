@@ -10,5 +10,5 @@ terraform {
 }
 
 provider "local" {
-    # here comes the configurations
+    # here comes the configurations for the local
 }
