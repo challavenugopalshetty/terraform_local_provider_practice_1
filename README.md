@@ -22,10 +22,12 @@ Always its good to learn a tool by doing smaller projects.
 
 ## Key components:
 
-- **Providers**  
+- **Providers:**  
     Providers in terraform are kind of pulgins that interact with the different cloud providers and they act like a bridge between terraform configurations and infrastructure resources.  
-    Declaring a provider: 
+      
     ```
+    # Declaring a provider
+
     terraform {
         required_providers {
             local = {
@@ -39,14 +41,119 @@ Always its good to learn a tool by doing smaller projects.
         # add the configurations for local provider
     }
     ```
-    here firstly the terraform block downloads the mentioned required provider here it is local provider from the terraform registery and provider block tell which all providers we are going to be used in this configuration. The best practice is to keep the providers in seperate file called **providers.tf**
-- Resources
-- Modules
-- Variables
-- State
-- Plan
-- Apply
-- Provisioners
+    First, the terraform block downloads the specified provider in this case, the **local** provider from the Terraform Registry. The provider block defines which providers will be used in this configuration. As a best practice, it’s recommended to keep provider configurations in a separate file called **providers.tf**.
+- **Resources:**  
+    Resources are the core components of the terraform, in simple words they are nothing but the infrastructure objects. Resources define and manange the infrastructure. For example virtual machines, database, virtual network.  
+
+    ```
+    # Declaring a Resources
+    # this is snippet 
+
+    resource "<PROVIDER>_<RESOURCE_TYPE>" "<NAME>" {
+        # configuration setting
+    }
+
+    ```  
+
+    ```
+    # Declaring a Resource
+    # Example of aws s3 bucket
+
+    resource "aws_s3_bucket" "bucket_1" {
+        bucket = "my-new-bucket"  # name of the bucket
+    }
+
+    # Example of aws EC2 instance
+
+    resource "aws_instance" "ec2_1" {
+        ami = "ami-123456"
+        instance_type = "t2.micro"
+    }
+    ```
+- **Modules:**  
+    - Modules in terraform are reusable configurations to manage and organize the infrastructure more effeciently. Also allows you to group the related resource together and reuse them multiple time or in different environments. 
+    - In simple words it's like a function or a macro.  
+    - Terraform has inbuild modules which we can download from the Registry and also user can create there own modules.  
+      
+    ```
+    # below is the file structure for user defined modules
+    # Modules are stored in seperate folder and its has its own main, variable and output tf files
+
+    /modules
+        ├── ec2-instance
+        │   ├── main.tf         # Define resources
+        │   ├── variables.tf    # Input variables
+        │   ├── outputs.tf      # Output values
+        │   ├── providers.tf    # Provider configuration (optional)
+
+    ```
+
+    ```
+    # Similarly when we download the modules from the terraform registry
+    # it gets stored in terraform folder
+
+    /your-terraform-project
+        ├── main.tf                 # Root configuration calling the module
+        ├── variables.tf             # Input variables for the root module
+        ├── outputs.tf               # Output values for the root module
+        ├── terraform.tfstate        # Terraform state file (after apply)
+        ├── .terraform/              # Terraform working directory
+        │   ├── modules/             # Directory containing downloaded modules
+        │   │   ├── <module-name>/   # The module downloaded from the registry
+        │   │   │   ├── main.tf      # Defines resources within the module
+        │   │   │   ├── variables.tf # Input variables for the module
+        │   │   │   ├── outputs.tf   # Output values for the module
+
+    # when we run the terraform init command the module gets downloaded into the terraform/modules folder
+    # Actually this terraform folder is auto-generated when we run the terraform init command it download 
+    # the providers and module that are mentioned in configuration files
+
+    ```
+- **Variables:**  
+    - Variables are used to **parameterize** the infrastrucure configuration.
+    - Making it more **dynamic, reusable and configurable** 
+    - Instead of hardcoding the values, we define the variable and assign the values at runtime  
+    ```
+    # In simple words we can say that this file has variables declared and default values are assigned
+    # There is another file called terraform.tfvars which hold the values assigned to the declared variables 
+    # and if any value assigned in this file will overwrite the default value declared in variables.tf file
+
+    variable "instance_type" {
+        description = "EC2 instance type"
+        type = string
+        default = "t2.micro" # this is the default value set to the variable
+    }
+    ```
+      
+    ```
+    # using that variable in main.tf
+
+    resource "aws_instance" "instance_1" {
+        ami = "ami-123456"
+        instance_type = var.instance_type # this way we parameterize the variables 
+    }
+    ```
+- **State:**  
+    - State is like tracking and maintaining the current state of the infrastructure that is provisioned by using terraform.
+    - Terraform stores the state in the terraform.tfstate file
+    ```
+    # below is the folder structure which has the state file and back file as well
+
+    /your-terraform-project
+        ├── main.tf
+        ├── variables.tf
+        ├── outputs.tf
+        ├── terraform.tfstate      # State file (stores the current state) this is auto-generated after running the terraform apply
+        ├── terraform.tfstate.backup  # Backup of previous state (this is also auto-generated)
+    ```
+    - 
+
+- **Plan:**  
+
+- **Apply:**  
+
+- **Provisioners:**  
+
 
 ## Core workflow of Terraform:
 
